@@ -17,3 +17,4 @@ RUN makepkg -si --noconfirm && \
     rm -f rpm-public-key.asc
 WORKDIR /home/user
 ENV PKGDEST=/home/user/pkg
+ENTRYPOINT ["/usr/bin/yay"]
