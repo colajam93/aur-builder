@@ -1,4 +1,6 @@
-Dockerfile for AUR building environment using [Yay](https://github.com/Jguer/yay).
+# aur-builder
+
+Dockerfile and script for AUR package building environment.
 
 ## Usage
 
