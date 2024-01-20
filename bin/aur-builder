@@ -97,7 +97,10 @@ _aur_builder_shell() {
 }
 
 _aur_builder_help() {
-    echo "aur-builder build-image|check-package|build-package"
+    echo "Usage: $0 build-image"
+    echo "       $0 check-package"
+    echo "       $0 build-package"
+    echo "       $0 shell"
 }
 
 # main
