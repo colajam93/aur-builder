@@ -1,7 +1,9 @@
 FROM archlinux:base-devel AS paru
 
+RUN pacman -Syy --noconfirm && pacman -S --noconfirm jq
 RUN curl -L -o paru.tar.zst \
-    https://github.com/Morganamilo/paru/releases/download/v2.0.1/paru-v2.0.1-x86_64.tar.zst
+    "$(curl -sS https://api.github.com/repos/Morganamilo/paru/releases \
+        | jq '[.[0].assets[] | select(.name | endswith("-x86_64.tar.zst"))] | sort_by(.name)[0].browser_download_url' -r)"
 RUN tar xvf paru.tar.zst
 
 FROM archlinux:base-devel
