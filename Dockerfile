@@ -19,8 +19,8 @@ ENV PKGDEST=/home/builder/pkg
 RUN \
     # dropbox https://aur.archlinux.org/packages/dropbox#comment-676597
     curl -sS https://linux.dropbox.com/fedora/rpm-public-key.asc | gpg --import - && \
-    # spotify https://aur.archlinux.org/packages/spotify#comment-904491
-    curl -sS https://download.spotify.com/debian/pubkey_7A3A762FAFD4A51F.gpg | gpg --import - && \
+    # spotify https://aur.archlinux.org/packages/spotify#comment-953231
+    curl -sS https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg | gpg --import - && \
     # force delete lock file to avoid hanging verifing
     rm -f .gnupg/public-keys.d/pubring.db.lock
 ENTRYPOINT ["/usr/local/bin/paru"]
