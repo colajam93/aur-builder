@@ -67,7 +67,9 @@ _aur_builder_collect_update_avaiable_package() {
         local_version=$(echo "$i" | jq -r '.local')
         aur_version=$(echo "$i" | jq -r '.aur')
         if [[ -z "${local_version}" ]]; then
-            echo "${name} is not installed. skipping"
+            if [[ $VERBOSE == "TRUE" ]]; then
+                echo "${name} is not installed. skipping"
+            fi
             continue
         fi
         if [[ -z "${aur_version}" ]]; then
