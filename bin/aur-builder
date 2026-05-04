@@ -7,6 +7,7 @@ set -euo pipefail
 _aur_builder_target_packages=()
 _aur_builder_dockerfile_dir="$(ghq root)/github.com/colajam93/aur-builder"
 _aur_builder_output_path="${HOME}/Downloads:/home/builder/pkg"
+_aur_builder_helper="paru"
 
 # functions
 _aur_builder_echoerr() {
@@ -91,7 +92,7 @@ _aur_builder_build_package() {
     if [[ ${#_aur_builder_target_packages[@]} -eq 0 ]]; then
         return
     fi
-    docker run --rm -v "${_aur_builder_output_path}" aur-builder -S "${_aur_builder_target_packages[@]}" --noconfirm
+    docker run --rm --entrypoint="/usr/local/bin/${_aur_builder_helper}" -v "${_aur_builder_output_path}" aur-builder -S "${_aur_builder_target_packages[@]}" --noconfirm
 }
 
 _aur_builder_shell() {
@@ -99,10 +100,14 @@ _aur_builder_shell() {
 }
 
 _aur_builder_help() {
-    echo "Usage: $0 build-image"
-    echo "       $0 check-package"
-    echo "       $0 build-package"
-    echo "       $0 shell"
+    echo "Usage: $0 [OPTIONS] build-image"
+    echo "       $0 [OPTIONS] check-package"
+    echo "       $0 [OPTIONS] build-package"
+    echo "       $0 [OPTIONS] shell"
+    echo
+    echo "Options:"
+    echo "  -v, --verbose           Print verbose output"
+    echo "  -H, --helper paru|yay   Select AUR helper for build-package (default: paru)"
 }
 
 # main
@@ -115,6 +120,24 @@ case $key in
     -v|--verbose)
     VERBOSE=TRUE
     shift
+    ;;
+    -H|--helper)
+    if [[ $# -lt 2 ]]; then
+        _aur_builder_echoerr "missing value for $1"
+        _aur_builder_help
+        exit 1
+    fi
+    case "$2" in
+        paru|yay)
+        _aur_builder_helper="$2"
+        shift 2
+        ;;
+        *)
+        _aur_builder_echoerr "invalid helper: $2"
+        _aur_builder_help
+        exit 1
+        ;;
+    esac
     ;;
     *)
     POSITIONAL+=("$1")
